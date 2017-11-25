@@ -28,12 +28,9 @@
  */
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
@@ -43,7 +40,6 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
@@ -51,8 +47,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import java.util.Locale;
 
 /**
  * This OpMode illustrates the basics of using the Vuforia engine to determine
@@ -73,14 +67,15 @@ import java.util.Locale;
  * is explained in {@link ConceptVuforiaNavigation}.
  */
 
-@Autonomous(name="Main AutoRed", group ="Test")
+@Autonomous(name="AutoRed", group ="Test")
+
 public class AutoRed extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
 
     Servo colourServo;
     ColorSensor colourSensor;
-    DistanceSensor sensorDistance;
+
     MecanumDrive drive;
 
     OpenGLMatrix lastLocation = null;
@@ -94,17 +89,7 @@ public class AutoRed extends LinearOpMode {
     @Override public void runOpMode() {
 
         colourServo = hardwareMap.servo.get("colourServo");
-
-        colourSensor = hardwareMap.get(ColorSensor.class, "colorDistanceSensor");
-
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "colorDistanceSensor");
-
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
-
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
-
+        colourSensor = hardwareMap.colorSensor.get("colourSensor");
 
         drive = new MecanumDrive(hardwareMap);
         /*
@@ -158,58 +143,23 @@ public class AutoRed extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            Color.RGBToHSV((int) (colourSensor.red() * 255),
-                    (int) (colourSensor.green() * 255),
-                    (int) (colourSensor.blue() * 255),
-                    hsvValues);
-            telemetry.addData("Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
-            telemetry.addData("Alpha", colourSensor.alpha());
-            telemetry.addData("Red  ", colourSensor.red());
-            telemetry.addData("Green", colourSensor.green());
-            telemetry.addData("Blue ", colourSensor.blue());
-            telemetry.addData("Hue", hsvValues[0]);
-            telemetry.update();
-
-            //Gem Knock-off
-
+    //Gem Knock-off
             colourServo.setPosition(1);
-            sleep(2200);
-            double avgColor = 0.0;
-            for(int i = 0; i < 5; i++) {
-                Color.RGBToHSV((int) (colourSensor.red() * 255),
-                        (int) (colourSensor.green() * 255),
-                        (int) (colourSensor.blue() * 255),
-                        hsvValues);
-                telemetry.addData("Hue", hsvValues[0]);
-                telemetry.addData("Avg Hue", avgColor);
-                if(hsvValues[0] >= 330) {
-                    avgColor += (hsvValues[0] - 330) / 5;
-                }
-                else {
-                    avgColor += hsvValues[0] / 5;
-                }
-                sleep(100);
-                telemetry.update();
-            }
-
-            if((250 > avgColor && avgColor > 120))
+            sleep(1000);
+            if(colourSensor.alpha() == 1)//TBD
             {
-                drive.mecMove(90, 0.5, 0);//Knock right one off
+                drive.tankDrive(.5,-.5);//Knock left one off
                 sleep(500);
             }
-            else if((0 >= avgColor && avgColor <=  30))
+            else if(colourSensor.alpha() != 0)
             {
-                drive.mecMove(270, 0.5, 0);//Knock left one off
+                drive.tankDrive(-.5,.5);//Knock Right one off
                 sleep(500);
             }
             drive.tankDrive(0,0);
             sleep(1000);
 
-            colourServo.setPosition(0);
-            sleep(1000);
 
-            requestOpModeStop();
 
             /**
              * See if any of the instances of {@link relicTemplate} are currently visible.
@@ -303,7 +253,6 @@ public class AutoRed extends LinearOpMode {
             }
 
             telemetry.update();
-
         }
     }
 

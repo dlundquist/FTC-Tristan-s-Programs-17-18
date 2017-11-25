@@ -19,7 +19,7 @@ public class LiftAndServos//I noah guy
     {
         liftMotor = hardwareMap.dcMotor.get("liftMotor"); //sets DcMotors to type of motor
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         servoLeft = hardwareMap.servo.get("servoL");
         servoRight = hardwareMap.servo.get("servoR");
@@ -27,10 +27,22 @@ public class LiftAndServos//I noah guy
 
     public void lift(double power)
     {
-        if(off + power > 0) {
+        //liftMotor.getCurrentPosition();
+        if(power >= 0) {
+            liftMotor.setTargetPosition(300);
             liftMotor.setPower(power);
         }
-        off += power;
+        else
+        {
+            liftMotor.setTargetPosition(0);
+            liftMotor.setPower(power);
+        }
+
+    }
+
+    public int liftPos()
+    {
+        return liftMotor.getCurrentPosition();
     }
 
     public void moveServos()

@@ -59,10 +59,18 @@ public class MecanumDrive
             turn = Math.signum(turn) * (1 - Math.abs(magnitude));
         }
 
-        motorLF.setPower(magnitude * Math.cos(radians) + turn);
-        motorLB.setPower(magnitude * Math.sin(radians) + turn);
-        motorRF.setPower(magnitude * Math.sin(radians) - turn);
-        motorRB.setPower(magnitude * Math.cos(radians) - turn);
+        motorLF.setPower((magnitude * Math.cos(radians) + turn)*(1));
+        motorLB.setPower((magnitude * Math.sin(radians) + turn)*(1));
+        motorRF.setPower((magnitude * Math.sin(radians) - turn)*(1));
+        motorRB.setPower((magnitude * Math.cos(radians) - turn)*(1));
+    }
+
+    public void setPosistion(int mlfPos, int mlbPos, int mrfPos, int mrbPos)
+    {
+        motorLF.setTargetPosition(mlfPos);
+        motorLB.setTargetPosition(mlbPos);
+        motorRF.setTargetPosition(mrfPos);
+        motorRB.setTargetPosition(mrbPos);
     }
 
     public void tankDrive(double powerL, double powerR)
@@ -71,6 +79,7 @@ public class MecanumDrive
         motorLB.setPower(powerL);
         motorRF.setPower(powerR);
         motorRB.setPower(powerR);
+
     }
 
     public ArrayList<Integer> getMotorPosistions()

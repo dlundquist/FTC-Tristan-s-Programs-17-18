@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.android.dx.dex.file.StringDataItem;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.LiftAndServos;
 import org.firstinspires.ftc.teamcode.RelicArm;
@@ -34,7 +35,7 @@ public class JustDrive extends OpMode {
     public void loop()
     {
 
-        if(gamepad1.left_bumper)//This makes it SLOWcomotion
+        if(gamepad1.left_bumper)
         {
             drive.move(gamepad1.left_stick_x/2.5, -gamepad1.left_stick_y/2.5, -gamepad1.right_stick_x/2.5);
         }
@@ -61,7 +62,8 @@ public class JustDrive extends OpMode {
         }
         LAS.moveServos();
 
-        LAS.lift((gamepad2.left_trigger-gamepad2.right_trigger));//Need a pick-me-up
+        LAS.lift((gamepad2.left_trigger-gamepad2.right_trigger));
+        int liftPosistion = LAS.liftPos();
 
         Jones.lift((gamepad2.right_stick_y));
 

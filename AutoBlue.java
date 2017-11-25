@@ -153,21 +153,21 @@ public class AutoBlue extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-                Color.RGBToHSV((int) (colourSensor.red() * 255),
-                        (int) (colourSensor.green() * 255),
-                        (int) (colourSensor.blue() * 255),
-                        hsvValues);
-                telemetry.addData("Distance (cm)",
-                        String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
-                telemetry.addData("Alpha", colourSensor.alpha());
-                telemetry.addData("Red  ", colourSensor.red());
-                telemetry.addData("Green", colourSensor.green());
-                telemetry.addData("Blue ", colourSensor.blue());
-                telemetry.addData("Hue", hsvValues[0]);
-                telemetry.update();
+            Color.RGBToHSV((int) (colourSensor.red() * 255),
+                    (int) (colourSensor.green() * 255),
+                    (int) (colourSensor.blue() * 255),
+                    hsvValues);
+            telemetry.addData("Distance (cm)",
+                    String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
+            telemetry.addData("Alpha", colourSensor.alpha());
+            telemetry.addData("Red  ", colourSensor.red());
+            telemetry.addData("Green", colourSensor.green());
+            telemetry.addData("Blue ", colourSensor.blue());
+            telemetry.addData("Hue", hsvValues[0]);
+            telemetry.update();
 
-    //Gem Knock-off
-
+            //Gem Knock-off
+            /*
             colourServo.setPosition(1);
             sleep(2200);
             double avgColor = 0.0;
@@ -206,8 +206,8 @@ public class AutoBlue extends LinearOpMode {
 
 
             //For lower left thing
-            requestOpModeStop();
-
+            //requestOpModeStop();
+            */
             /**
              * See if any of the instances of {@link relicTemplate} are currently visible.
              * {@link RelicRecoveryVuMark} is an enum which can have the following values:
